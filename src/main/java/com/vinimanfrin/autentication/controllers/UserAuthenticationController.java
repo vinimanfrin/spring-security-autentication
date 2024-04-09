@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthenticationController {
+public class UserAuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -32,7 +32,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
-        if (this.userRepository.findByEmail(data.email()) == null) return ResponseEntity.badRequest().body("Email ja cadastrado");
+        if (this.userRepository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().body("Email ja cadastrado");
 
         var encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User user = new User(data.email(),encryptedPassword, data.role());
